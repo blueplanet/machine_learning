@@ -5,5 +5,5 @@ for key in dic:
 
 # list?
 array = [1, 2, 3, 4, 5]
-myList = [item**2 for item in array]
+myList = [item**2 for item in array if item > 2]
 print myList

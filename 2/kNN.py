@@ -1,3 +1,5 @@
+# coding: utf-8
+
 from numpy import *
 import operator
 import matplotlib
@@ -51,7 +53,7 @@ def autoNorm(dataSet):
     normDataSet = dataSet - tile(minVals, (rows, 1))
     normDataSet = normDataSet / tile(ranges, (rows, 1))
 
-    return normDataSet, ranges, min
+    return normDataSet, ranges, minVals
 
 def show_plt():
     mat, labels = file2matrix('dat.csv')
@@ -85,3 +87,17 @@ def datingClassTest():
             errorCount += 1.0
 
     print "the total error rate is: %f" % (errorCount / float(training_count))
+
+def classifyPerson():
+    results = ['not at all', 'in small doses', 'in large doses']
+
+    percentTats = float(raw_input('玩游戏的时间百分比'))
+    ffMiles = float(raw_input('每年乘坐飞机的里程数'))
+    iceCream = float(raw_input('每年冰淇淋的重量'))
+
+    mat, labels = file2matrix('test_set.csv')
+    normMat, ranges, minVals = autoNorm(mat)
+    inArr = array([ffMiles, percentTats, iceCream])
+    classifierResult = classify0((inArr - minVals) / ranges, normMat, labels, 3)
+
+    print "你对这个人的喜爱程度：", results[classifierResult - 1]

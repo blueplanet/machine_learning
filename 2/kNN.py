@@ -21,3 +21,21 @@ def classify0(inX, dataSet, labels, k):
 
     sortedClassCount = sorted(classCount.items(), key=operator.itemgetter(1), reverse=True)
     return sortedClassCount[0][0]
+
+def file2matrix(filename):
+    file = open(filename)
+    lines = file.readlines()
+    count = len(lines)
+    mat = zeros((count, 3))
+
+    classLabelVector = []
+    index = 0
+
+    for line in lines:
+        line = line.strip()
+        columns = line.split(',')
+        mat[index, :] = columns[0:3]
+        classLabelVector.append(int(columns[-1]))
+        index += 1
+
+    return mat, classLabelVector

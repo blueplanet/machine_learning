@@ -1,5 +1,7 @@
 from numpy import *
 import operator
+import matplotlib
+import matplotlib.pyplot as plt
 
 def createDataSet():
     group = array([[1.0, 1.1], [1.0, 1.0], [0, 0], [0, 0.1]])
@@ -39,3 +41,10 @@ def file2matrix(filename):
         index += 1
 
     return mat, classLabelVector
+
+def show_plt():
+    mat, labels = file2matrix('dat.csv')
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    ax.scatter(mat[:, 1], mat[:, 2], 50.0 * array(labels), 100.0 * array(labels))
+    plt.show()

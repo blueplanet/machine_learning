@@ -42,9 +42,25 @@ def file2matrix(filename):
 
     return mat, classLabelVector
 
+def autoNorm(dataSet):
+    minVals = dataSet.min(0)
+    maxVals = dataSet.max(0)
+    ranges = maxVals - minVals
+    normDataSet = zeros(shape(dataSet))
+    rows = dataSet.shape[0]
+    normDataSet = dataSet - tile(minVals, (rows, 1))
+    normDataSet = normDataSet / tile(ranges, (rows, 1))
+
+    return normDataSet, ranges, min
+
 def show_plt():
     mat, labels = file2matrix('dat.csv')
     fig = plt.figure()
     ax = fig.add_subplot(111)
     ax.scatter(mat[:, 1], mat[:, 2], 50.0 * array(labels), 100.0 * array(labels))
     plt.show()
+
+def normMat():
+    mat, labels = file2matrix('dat.csv')
+    normMat, ranges, minVals = autoNorm(mat)
+    print normMat

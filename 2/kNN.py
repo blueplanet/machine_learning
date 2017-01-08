@@ -64,3 +64,24 @@ def normMat():
     mat, labels = file2matrix('dat.csv')
     normMat, ranges, minVals = autoNorm(mat)
     print normMat
+
+def datingClassTest():
+    test_set_percent = 0.3
+    errorCount = 0.0
+
+    datingDataMat, datingLabels = file2matrix('test_set.csv')
+    normMat, ranges, minVals = autoNorm(datingDataMat)
+    row_count = normMat.shape[0]
+    training_count = int(row_count * test_set_percent)
+
+    for i in range(training_count):
+        classifierResult = classify0(normMat[i, :], normMat[training_count:row_count, :], \
+            datingLabels[training_count:row_count], 3)
+
+        print "the classifier came back with: %d, the real answer is: %d"\
+            % (classifierResult, datingLabels[i])
+
+        if (classifierResult != datingLabels[i]):
+            errorCount += 1.0
+
+    print "the total error rate is: %f" % (errorCount / float(training_count))

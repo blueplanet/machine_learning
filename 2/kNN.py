@@ -101,3 +101,14 @@ def classifyPerson():
     classifierResult = classify0((inArr - minVals) / ranges, normMat, labels, 3)
 
     print "你对这个人的喜爱程度：", results[classifierResult - 1]
+
+def img2vector(filename):
+    returnVect = zeros((1, 1024))
+    file = open(filename)
+
+    for i in range(32):
+        line = file.readline()
+        for j in range(32):
+            returnVect[0, 32 * i + j] = int(line[j])
+
+    return returnVect

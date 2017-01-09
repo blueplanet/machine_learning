@@ -26,3 +26,14 @@ def createDataSet():
                 [0, 1, 'no']]
     labels = ['no surfacing', 'flippers']
     return dataSet, labels
+
+def splitDataSet(dataSet, axis, value):
+    retDataSet = []
+
+    for dataRow in dataSet:
+        if dataRow[axis] == value:
+            reducedFeatVec = dataRow[:axis]
+            reducedFeatVec.extend(dataRow[axis + 1:])
+            retDataSet.append(reducedFeatVec)
+
+    return retDataSet

@@ -13,7 +13,7 @@ def calcShannonEnt(dataSet):
 
     shannonEnt = 0.0
     for key in labelCounts:
-        prob = float(labelCounts[keys]) / numEntries
+        prob = float(labelCounts[key]) / numEntries
         shannonEnt -= prob * log(prob, 2)
 
     return shannonEnt

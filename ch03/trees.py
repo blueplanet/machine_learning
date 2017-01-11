@@ -115,3 +115,14 @@ def grabTree(fileName):
 
     fr = open(fileName)
     return pickle.load(fr)
+
+def lenses():
+    import treePlotter
+
+    fr = open('lenses.txt')
+    lenses = [inst.strip().split('\t') for inst in fr.readlines()]
+    lensesLables = ['age', 'prescript', 'astigmatic', 'tearRate']
+    tree = createTree(lenses, lensesLables)
+    print tree
+
+    treePlotter.createPlot(tree)

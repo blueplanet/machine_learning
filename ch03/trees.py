@@ -102,3 +102,16 @@ def classify(tree, labels, testVec):
             else: classLabel = secondDict[key]
 
     return classLabel
+
+def storeTree(tree, fileName):
+    import pickle
+
+    fw = open(fileName, 'w')
+    pickle.dump(tree, fw)
+    fw.close()
+
+def grabTree(fileName):
+    import pickle
+
+    fr = open(fileName)
+    return pickle.load(fr)

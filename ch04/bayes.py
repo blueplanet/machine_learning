@@ -166,7 +166,7 @@ def localWords(feed1, feed0):
 
     trainingSet = range(2 * minLen)
     testSet = []
-    for in in range(20):
+    for i in range(10):
         randIndex = int(random.uniform(0, len(trainingSet)))
         testSet.append(trainingSet[randIndex])
         del(trainingSet[randIndex])
@@ -187,3 +187,10 @@ def localWords(feed1, feed0):
 
     print 'the error rate is : ', float(errorCount) / len(testSet)
     return vocabList, p0V, p1V
+
+def testWords():
+    import feedparser
+
+    ny = feedparser.parse('http://newyork.craigslist.org/stp/index.rss')
+    sf = feedparser.parse('http://sfbay.craigslist.org/stp/index.rss')
+    vocabList, pSF, pNY = localWords(ny, sf)

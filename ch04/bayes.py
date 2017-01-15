@@ -211,12 +211,12 @@ def getTopWords():
         if p0V[i] > -6.0 : topSF.append((vocabList[i], p0V[i]))
         if p1V[i] > -6.0 : topNY.append((vocabList[i], p1V[i]))
 
-    sortedSF = sorted(topSF, key = lambda pair: pair[1], reverse = True)
-    print "SF**" * 10
+    sortedSF = sorted(topSF, key = lambda pair: pair[1], reverse = True)[:10]
+    print "SF**" * 20
     for item in sortedSF:
         print item[0]
 
-    sortedNY = sorted(topNY, key = lambda pair: pair[1], reverse = True)
-    print "NY**" * 10
+    sortedNY = sorted(topNY, key = lambda pair: pair[1], reverse = True)[:10]
+    print "NY**" * 20
     for item in sortedNY:
         print item[0]

@@ -107,11 +107,10 @@ def readAllFiles():
 def spamTest():
     docList, fullText, classList = readAllFiles()
     words = parseUniqueUnits(docList)
-
     trainingIndexes = range(50)
     testIndexes = []
 
-    for i in range(20):
+    for i in range(10):
         randIndex = int(random.uniform(0, len(trainingIndexes)))
         testIndexes.append(trainingIndexes[randIndex])
         del(trainingIndexes[randIndex])
@@ -123,13 +122,21 @@ def spamTest():
         trainClasses.append(classList[docIndex])
 
     p0V, p1V, pSpam = trainNB0(array(trainMat), array(trainClasses))
+
     errorCount = 0
     for docIndex in testIndexes:
         wordVector = setOfWords2Vec(words, docList[docIndex])
         if classifyNB(array(wordVector), p0V, p1V, pSpam) != classList[docIndex]:
             errorCount += 1
 
-    print 'the error rate is: ', float(errorCount / len(testIndexes))
+    errorRate = float(errorCount) / len(testIndexes)
+    print 'the error rate is: ', errorRate
+    return errorRate
+
+def spamTestAvg(count):
+    errorRates = [spamTest() for i in range(count)]
+    argRate = average(errorRates)
+    print 'argRate of count(%d) is: %f' % (count, argRate)
 
 def calcMostFreq(vocabList, fullText):
     import operator

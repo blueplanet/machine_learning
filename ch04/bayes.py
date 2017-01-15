@@ -139,7 +139,7 @@ def calcMostFreq(vocabList, fullText):
         freqDict[token] = fullText.count(token)
 
     sortedFreq = sorted(freqDict.iteritems(), key = operator.itemgetter(1), reverse = True)
-    return sortedFreq
+    return sortedFreq[:30]
 
 def localWords(feed1, feed0):
     import feedparser
@@ -195,10 +195,15 @@ def testWords():
     sf = feedparser.parse('http://sfbay.craigslist.org/stp/index.rss')
     vocabList, pSF, pNY = localWords(ny, sf)
 
-def getTopWords(nf, sf):
+def getTopWords():
     import operator
+    import feedparser
+
+    ny = feedparser.parse('http://newyork.craigslist.org/stp/index.rss')
+    sf = feedparser.parse('http://sfbay.craigslist.org/stp/index.rss')
 
     vocabList, p0V, p1V = localWords(ny, sf)
+
     topNY = []
     topSF = []
 

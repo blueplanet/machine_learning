@@ -194,3 +194,24 @@ def testWords():
     ny = feedparser.parse('http://newyork.craigslist.org/stp/index.rss')
     sf = feedparser.parse('http://sfbay.craigslist.org/stp/index.rss')
     vocabList, pSF, pNY = localWords(ny, sf)
+
+def getTopWords(nf, sf):
+    import operator
+
+    vocabList, p0V, p1V = localWords(ny, sf)
+    topNY = []
+    topSF = []
+
+    for i in range(len(p0V)):
+        if p0V[i] > -6.0 : topSF.append((vocabList[i], p0V[i]))
+        if p1V[i] > -6.0 : topNY.append((vocabList[i], p1V[i]))
+
+    sortedSF = sorted(topSF, key = lambda pair: pair[1], reverse = True)
+    print "SF**" * 10
+    for item in sortedSF:
+        print item[0]
+
+    sortedNY = sorted(topNY, key = lambda pair: pair[1], reverse = True)
+    print "NY**" * 10
+    for item in sortedNY:
+        print item[0]

@@ -27,7 +27,8 @@ def setOfWords2Vec(vocabList, inputSet):
     return returnVec
 
 def bagOfWords2VecMN(vocabList, inputSet):
-    retrieveTree = [0] * len(vocabList)
+    returnVec = [0] * len(vocabList)
+
     for word in inputSet:
         if word in vocabList:
             returnVec[vocabList.index(word)] += 1
@@ -118,7 +119,7 @@ def spamTest():
     trainMat = []
     trainClasses = []
     for docIndex in trainingIndexes:
-        trainMat.append(setOfWords2Vec(words, docList[docIndex]))
+        trainMat.append(bagOfWords2VecMN(words, docList[docIndex]))
         trainClasses.append(classList[docIndex])
 
     p0V, p1V, pSpam = trainNB0(array(trainMat), array(trainClasses))

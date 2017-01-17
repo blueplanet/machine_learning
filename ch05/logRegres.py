@@ -74,13 +74,14 @@ def plotStoc():
 def stocGradAscent1(dataMat, classLabels, numlter = 150):
     m, n = shape(dataMat)
     weights = ones(n)
+
     for j in range(numlter):
         dataIndex = range(m)
 
         for i in range(m):
             alpha = 4 / (1.0 + j + i) + 0.01
             randIndex = int(random.uniform(0, len(dataIndex)))
-            h = sigmoid(dataMat[randIndex] * weights)
+            h = sigmoid(sum(dataMat[randIndex] * weights))
             error = classLabels[randIndex] - h
             weights = weights + alpha * error * dataMat[randIndex]
             del(dataIndex[randIndex])

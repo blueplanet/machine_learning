@@ -93,3 +93,21 @@ def plotStoc1():
     dataArr, labelMat = loadDataSet()
     weights = stocGradAscent1(array(dataArr), labelMat)
     plotBestFit(weights)
+
+def classifyVector(inX, weights):
+    prob = sigmoid(sum(inX * weights))
+    if prob > 0.5: return 1.0
+    else: return 0.0
+
+def colicTest():
+    frTrain = open('horseColicTraining.txt')
+    frTest = open('horseColiTest.txt')
+    trainingSet = []
+    trainingLables = []
+
+    for line in frTrain.readlines():
+        currLine = line.strip().split('\t')
+        lineArr = []
+        # TODO: lineArr = [float(value) for value in currLine[:21]]
+        for i in range(21):
+            lineArr.append(float(currLine[i]))

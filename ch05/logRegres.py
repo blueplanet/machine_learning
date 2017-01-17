@@ -29,12 +29,9 @@ def gradAscent(dataMat, classLabels):
 
     return weights
 
-def plotBestFit(wei):
+def plotBestFit(weights):
     import matplotlib.pyplot as plt
-    # dataArr, labelMat = loadDataSet()
-    # wei = gradAscent(dataArr, labelMat)
 
-    weights = wei
     dataMat, labelMat = loadDataSet()
     dataArr = array(dataMat)
     n = shape(dataArr)[0]
@@ -90,3 +87,8 @@ def stocGradAscent1(dataMat, classLabels, numlter = 150):
 
     return weights
 
+
+def plotStoc1():
+    dataArr, labelMat = loadDataSet()
+    weights = stocGradAscent1(array(dataArr), labelMat)
+    plotBestFit(weights)

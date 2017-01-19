@@ -114,7 +114,7 @@ def colicTest():
         trainingSet.append(lineArr)
         trainingLables.append(float(currLine[21]))
 
-    trainWeights = stocGradAscent1(array(trainingSet, trainingLables, 500))
+    trainWeights = stocGradAscent1(array(trainingSet), trainingLables, 500)
     errorCount = 0
     numTestVec = 0.0
     for line in frTest.readlines():

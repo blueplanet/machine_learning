@@ -1,4 +1,4 @@
-import numpy
+from numpy import *
 
 def loadDataSet(fileName):
     dataMat = []
@@ -61,8 +61,8 @@ def smoSimple(dataMatIn, classLabels, C, toler, maxIter):
                 alphas[j] = clipAlpha(alphas[j], H, L)
                 if (abs(alphas[j] - alphaJold) < 0.00001): print "j not moving enough"; continue
                 alphas[i] += labelMat[j] * labelMat[i] * (alphaJold - alphas[j])
-                b1 = b - Ei - labelMat[i] * (alphas[i] - alphaIold) * dataMatrix[i, :] * datamatrix[i, :].T - \
-                    labelMat[j] * (alphas[j] - alphaJold) * datamatrix[i, :] * dataMatrix[j, :].T
+                b1 = b - Ei - labelMat[i] * (alphas[i] - alphaIold) * dataMatrix[i, :] * dataMatrix[i, :].T - \
+                    labelMat[j] * (alphas[j] - alphaJold) * dataMatrix[i, :] * dataMatrix[j, :].T
                 b2 = b - Ej - labelMat[i] * (alphas[i] - alphaIold) * dataMatrix[i, :] * dataMatrix[j, :].T - \
                     labelMat[j] * (alphas[j] - alphaJold) * dataMatrix[j, :] * dataMatrix[j, :].T
                 if (0 < alphas[i]) and (C > alphas[i]): b = b1
@@ -76,4 +76,8 @@ def smoSimple(dataMatIn, classLabels, C, toler, maxIter):
         print "iteration number; %d" % iter
     return b, alphas
 
+
+def testSmo():
+    dataMat, labelMat = loadDataSet('testSet.txt')
+    b, alphas = smoSimple(dataMat, labelMat, 0.6, 0.001, 40)
 

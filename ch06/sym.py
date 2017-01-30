@@ -22,8 +22,8 @@ def selectJrand(i, m):
 def clipAlpha(aj, H, L):
     if aj > H:
         aj = H
-        if L > aj:
-            aj = L
+    if L > aj:
+        aj = L
 
     return aj
 
@@ -56,6 +56,7 @@ def smoSimple(dataMatIn, classLabels, C, toler, maxIter):
                 if L == H: print "L==H"; continue
                 eta = 2.0 * dataMatrix[i, :] * dataMatrix[j, :].T - dataMatrix[i, :] * dataMatrix[i, :].T - dataMatrix[j, :] * dataMatrix[j, :].T
                 if eta >= 0: print "eta >= 0"; continue
+
                 alphas[j] -= labelMat[j] * (Ei - Ej) / eta
                 alphas[j] = clipAlpha(alphas[j], H, L)
                 if (abs(alphas[j] - alphaJold) < 0.00001): print "j not moving enough"; continue

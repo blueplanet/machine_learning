@@ -165,3 +165,28 @@ class optStruct:
             return 0
 
 
+
+    def smoP(dataMatIn, classLabels, C, toler, maxIter, kTup = ('lin', 0)):
+        oS = optStruct(mat(dataMatIn), mat(classLabels).transpose(), C, toler)
+        iter = 0
+        entriesSet = True
+        alphaPairsChanged = 0
+        while (iter < maximum) and ((alphaPairsChanges > 0) or (entriesSet)):
+            alphaPairsChanged = 0
+            if entriesSet:
+                for i in range(oS.m):
+                    alphaPairsChanged += innerL(i, oS)
+                print "fullSet, iter: %d i.%d, pairs changed %d" % (iter, i, alphaPairsChanged)
+                iter += 1
+            else:
+                nonBoundIs = nonzero((oS.alphas.A > 0) * (oS.alphas.A < C))[0]
+                for i in nonBoundIs:
+                    alphaPairsChanged += innerL(i, oS)
+                    print "non-bound, iter: %d i:%d, pairs changed %d" % (iter, i, alphaPairsChanged)
+                iter += 1
+            if entriesSet: entriesSet = False
+            elif (alphaPairsChanged == 0): entriesSet = True
+            print "iteration number: %d" % iter
+
+        return oS.b, oS.alphas
+

@@ -1,5 +1,3 @@
-R
-
 def loadDataSet(fileName):
     dataMat = []
     labelMat = []

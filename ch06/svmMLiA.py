@@ -1,5 +1,17 @@
 from numpy import *
 
+def loadDataSet(fileName):
+    dataMat = []
+    labelMat = []
+    fr = open(fileName)
+
+    for line in fr.readlines():
+        lineArr = line.strip().split('\t')
+        dataMat.append([float(lineArr[0]), float(lineArr[1])])
+        labelMat.append(float(lineArr[2]))
+
+    return dataMat, labelMat
+
 def kernelTrans(X, A, kTup):
     m, n = shape(X)
     K = mat(zeros((m, 1)))
@@ -107,3 +119,37 @@ def calcEk(oS, k):
     fXk = float(multiply(oS.alphas, oS.labelMat).T * oS.K[:, k] + oS.b)
     Ek = fXk - float(oS.labelMat[k])
     return Ek
+
+def testRbf(k1 = 1.3):
+    dataArr, labelArr = loadDataSet('testSetRBF.txt')
+    b, alphas = smoP(dataArr, labelArr, 20, 0.0001, 10000, ('rbf', k1))
+    dataMat = mat(dataArr)
+    labelMat = mat(labelArr).transpose()
+
+    svInd = nonzero(alphas.A > 0)[0]
+    sVs = dataMat[svInd]
+    labelSV = labelMat[svInd]
+
+    print "there are %d Support Vectors" % shape(sVs)[0]
+
+    m, n = shape(dataMat)
+    errorCount = 0
+    for i in range(m):
+        kernelEval = kernelTrans(sVs, dataMat[i, :], ('rbf', k1))
+        predict = kernelEval.T * multiarray(labelSV, alphas[svInd]) + b
+        if sign(predict) != sign(labelArr[i]): errorCount += 1
+
+    print "the training error rate is: %f" % (float(errorCount) / m)
+
+    dataArr, labelArr = loadDataSet('testSetRBF2.txt')
+    errorCount = 0
+    dataMat = mat(dataArr)
+    labelMat = mat(labelArr).transpose()
+    m, n = shape(dataMat)
+    for i in range(m):
+        kernelEval = kernelTrans(sVs, dataMat[i, :], ('rbf', k1))
+        predict = kernelEval.T * multiarray(labelSV, alphas[svInd]) + b
+        if sign(predict) != sign(labelArr[i]): errorCount += 1
+    print "the test error rate is: %f" % (flaot(errorCount) / m)
+
+

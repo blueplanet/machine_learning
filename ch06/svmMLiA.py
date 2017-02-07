@@ -40,6 +40,10 @@ class optStruct:
             self.K[:, i] = kernelTrans(self.X, self.X[i, :], kTup)
 
 
+def updateEk(oS, k):
+    Ek = calcEk(oS, k)
+    oS.eCache[k] = [1, Ek]
+
 def clipAlpha(aj, H, L):
     if aj > H:
         aj = H
@@ -71,6 +75,12 @@ def selectJ(i, oS, Ei):
 
     return j, Ej
 
+def selectJrand(i, m):
+    j = i
+    while (j == i):
+        j = int(random.uniform(0, m))
+    return j
+
 def clipAlpha(aj, H, L):
     if aj > H:
         aj = H
@@ -94,7 +104,7 @@ def innerL(i, oS):
             H = min(oS.C, oS.alphas[j] + oS.alphas[i])
         if L == H: print "L == H"; return 0
 
-        eta = 2.0 * oS.X[i, j] - oS.k[i, i] - oS.K[j, j]
+        eta = 2.0 * oS.X[i, j] - oS.K[i, i] - oS.K[j, j]
         if eta >= 0: print "eta >= 0"; return 0
 
         oS.alphas[j] -= oS.labelMat[j] * (Ei - Ej) / eta
@@ -119,6 +129,30 @@ def calcEk(oS, k):
     fXk = float(multiply(oS.alphas, oS.labelMat).T * oS.K[:, k] + oS.b)
     Ek = fXk - float(oS.labelMat[k])
     return Ek
+
+def smoP(dataMatIn, classLabels, C, toler, maxIter, kTup = ('lin', 0)):
+    oS = optStruct(mat(dataMatIn), mat(classLabels).transpose(), C, toler, kTup)
+    iter = 0
+    entriesSet = True
+    alphaPairsChanged = 0
+    while (iter < maximum) and ((alphaPairsChanged > 0) or (entriesSet)):
+        alphaPairsChanged = 0
+        if entriesSet:
+            for i in range(oS.m):
+                alphaPairsChanged += innerL(i, oS)
+            print "fullSet, iter: %d i.%d, pairs changed %d" % (iter, i, alphaPairsChanged)
+            iter += 1
+        else:
+            nonBoundIs = nonzero((oS.alphas.A > 0) * (oS.alphas.A < C))[0]
+            for i in nonBoundIs:
+                alphaPairsChanged += innerL(i, oS)
+                print "non-bound, iter: %d i:%d, pairs changed %d" % (iter, i, alphaPairsChanged)
+            iter += 1
+        if entriesSet: entriesSet = False
+        elif (alphaPairsChanged == 0): entriesSet = True
+        print "iteration number: %d" % iter
+
+    return oS.b, oS.alphas
 
 def testRbf(k1 = 1.3):
     dataArr, labelArr = loadDataSet('testSetRBF.txt')

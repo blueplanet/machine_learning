@@ -6,7 +6,7 @@ def kernelTrans(X, A, kTup):
         for j in range(m):
             deltaRow = X[j, :] - A
             K[j] = deltaRow * deltaRow.T
-        K = exp(K / (- * kTup[1] ** 2))
+        K = exp(K / (-1 * kTup[1] ** 2))
     else: raise NameError('Houston We Have a Probleem -- That Kernel is not recognized')
 
     return K

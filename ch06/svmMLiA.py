@@ -104,7 +104,7 @@ def innerL(i, oS):
             H = min(oS.C, oS.alphas[j] + oS.alphas[i])
         if L == H: print "L == H"; return 0
 
-        eta = 2.0 * oS.X[i, j] - oS.K[i, i] - oS.K[j, j]
+        eta = 2.0 * oS.K[i, j] - oS.K[i, i] - oS.K[j, j]
         if eta >= 0: print "eta >= 0"; return 0
 
         oS.alphas[j] -= oS.labelMat[j] * (Ei - Ej) / eta
@@ -113,10 +113,10 @@ def innerL(i, oS):
         if (abs(oS.alphas[j] - alphaJold) < 0.00001):
             print "j not moving enough"; return 0
         updateEk(oS, i)
-        b1 = oS.b - Ei - oS.labelMat[i] * (oS.alphas[i] - alphaIold) * oS.k[i, i] - \
+        b1 = oS.b - Ei - oS.labelMat[i] * (oS.alphas[i] - alphaIold) * oS.K[i, i] - \
                 oS.labelMat[j] * (oS.alphas[j] - alphaJold) * oS.K[i, j]
-        b2 = oS.b - Ej - oS.labelMat[i] * (oS.alphas[i] - alphaIold) * oS.k[i, j] - \
-                oS.labelMat[j] * (oS.alphas[j] - alphaJold) * oS.k[j, j]
+        b2 = oS.b - Ej - oS.labelMat[i] * (oS.alphas[i] - alphaIold) * oS.K[i, j] - \
+                oS.labelMat[j] * (oS.alphas[j] - alphaJold) * oS.K[j, j]
 
         if (0 < oS.alphas[i]) and (oS.C > oS.alphas[i]): oS.b = b1
         elif (0 < oS.alphas[j]) and (oS.C > oS.alphas[j]): oS.b = b2
@@ -170,7 +170,7 @@ def testRbf(k1 = 1.3):
     errorCount = 0
     for i in range(m):
         kernelEval = kernelTrans(sVs, dataMat[i, :], ('rbf', k1))
-        predict = kernelEval.T * multiarray(labelSV, alphas[svInd]) + b
+        predict = kernelEval.T * multiply(labelSV, alphas[svInd]) + b
         if sign(predict) != sign(labelArr[i]): errorCount += 1
 
     print "the training error rate is: %f" % (float(errorCount) / m)
@@ -182,8 +182,8 @@ def testRbf(k1 = 1.3):
     m, n = shape(dataMat)
     for i in range(m):
         kernelEval = kernelTrans(sVs, dataMat[i, :], ('rbf', k1))
-        predict = kernelEval.T * multiarray(labelSV, alphas[svInd]) + b
+        predict = kernelEval.T * multiply(labelSV, alphas[svInd]) + b
         if sign(predict) != sign(labelArr[i]): errorCount += 1
-    print "the test error rate is: %f" % (flaot(errorCount) / m)
+    print "the test error rate is: %f" % (float(errorCount) / m)
 
 

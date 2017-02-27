@@ -211,7 +211,7 @@ def loadImages(dirName):
         trainingMat[i, :] = img2vector('%s/%s' % (dirName, filenameStr))
     return trainingMat, hwLabels
 
-def testDigits(kTup = ('rbf'), 10)):
+def testDigits(kTup = ('rbf', 10)):
     dataArr, labelArr = loadImages('trainingDigits')
     b, alphas = smoP(dataArr, labelArr, 200, 0.0001, 10000, kTup)
     datMat = mat(dataArr); labelMat = mat(labelArr).transpose()
@@ -224,7 +224,7 @@ def testDigits(kTup = ('rbf'), 10)):
     errorCount = 0
     for i in range(m):
         kernelEval = kernelTrans(sVs, datMat[i, :], kTup)
-        predict = kernelEval..T * multiply(labelSV, alphas[svInd]) + b
+        predict = kernelEval.T * multiply(labelSV, alphas[svInd]) + b
         if sign(predict) != sign(labelArr[i]): errorCount += 1
 
     print "the training error rate is: %f" % (float(errorCount) / m)

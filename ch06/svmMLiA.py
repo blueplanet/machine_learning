@@ -206,6 +206,7 @@ def loadImages(dirName):
     for i in range(m):
         filenameStr = trainingFileList[i]
         fileStr = filenameStr.split('.')[0]
+        classNumStr = int(fileStr.split('_')[0])
         if classNumStr == 9: hwLabels.append(-1)
         else: hwLabels.append(1)
         trainingMat[i, :] = img2vector('%s/%s' % (dirName, filenameStr))

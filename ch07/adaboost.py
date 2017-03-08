@@ -24,7 +24,7 @@ def buildStump(dataArr, classLables, D):
     dataMatrix = mat(dataArr)
     labelMat = mat(classLables).T
     m, n = shape(dataMatrix)
-    numSteps = 10.0; bestStump = {}; bestClassEst = mat(zeros(m, 1))
+    numSteps = 10.0; bestStump = {}; bestClassEst = mat(zeros((m, 1)))
     minError = inf
 
     for i in range(n):
@@ -46,3 +46,35 @@ def buildStump(dataArr, classLables, D):
                     bestStump['ineq'] = inequal
 
     return bestStump, minError, bestClassEst
+
+def adaBoostTrainDS(dataArr, classLabels, numIt = 40):
+    weakClassArr = []
+    m = shape(dataArr)[0]
+    D = mat(ones((m, 1)) / m)
+    aggClassEst = mat(zeros((m, 1)))
+    for i in range(numIt):
+        bestStump, error, classEst = buildStump(dataArr, classLabels, D)
+        print "D: ", D.T
+
+        alpha = float(0.5 * log((1.0 - error) / max(error, 1e-16)))
+        bestStump['alpha'] = alpha
+        weakClassArr.append(bestStump)
+        print "classEst: ", classEst.T
+
+        expon = multiply(-1 * alpha * mat(classLabels).T, classEst)
+        D = multiply(D, exp(expon))
+        D = D / D.sum()
+        aggClassEst += alpha * classEst
+        print "aggClassEst: ", aggClassEst.T
+
+        aggErrors = multiply(sign(aggClassEst) != mat(classLabels).T, ones((m, 1)))
+        errorRate = aggErrors.sum() / m
+        print "total error: ", errorRate, "\n"
+        if errorRate == 0.0: break
+
+    return weakClassArr
+
+datMat, classLabels = loadSimpleData()
+classifierArray = adaBoostTrainDS(datMat, classLabels, 9)
+
+
